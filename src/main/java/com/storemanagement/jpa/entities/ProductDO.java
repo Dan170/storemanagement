@@ -1,17 +1,16 @@
 package com.storemanagement.jpa.entities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Table(name = "product")
 @Entity
-public class ProductDO {
-
-    @Id
-    @GeneratedValue
-    private long id;
+@Getter
+@SuperBuilder
+public class ProductDO extends AbstractDO {
 
     private String name;
 
@@ -24,6 +23,12 @@ public class ProductDO {
     private long quantity;
 
     private double weight;
+
+    @PrePersist
+    protected void onCreate() {
+        super.onCreate();
+        this.rating = 0.0;
+    }
 
 //    add manyToOne to a review table
 //    private List<Review> reviews;

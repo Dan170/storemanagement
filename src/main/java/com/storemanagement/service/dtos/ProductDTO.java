@@ -1,10 +1,14 @@
 package com.storemanagement.service.dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter
 @AllArgsConstructor
+@Builder
 public class ProductDTO {
 
     private long id;
@@ -20,6 +24,10 @@ public class ProductDTO {
     private long quantity;
 
     private double weight;
+
+    private LocalDateTime createdOn;
+
+    private LocalDateTime updatedOn;
 
 //    add manyToOne to a review table
 //    private List<Review> reviews;
