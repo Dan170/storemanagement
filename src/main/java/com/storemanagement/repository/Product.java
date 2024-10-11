@@ -1,4 +1,4 @@
-package com.inghubs.storemanagement.repository;
+package com.storemanagement.repository;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,5 +1,5 @@
 # Store Management
-This is a Store Management project created by Daniel Popescu for ING Hubs. The project has the following requirements:
+This is a Store Management project created by Daniel Popescu. The project has the following requirements:
 
 - Create an API that acts as a store management tool
 - Create a Github profile if you don't have one
