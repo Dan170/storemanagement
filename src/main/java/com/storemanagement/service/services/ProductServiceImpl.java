@@ -2,6 +2,7 @@ package com.storemanagement.service.services;
 
 import com.storemanagement.jpa.entities.ProductDO;
 import com.storemanagement.jpa.repositories.ProductRepository;
+import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
 import com.storemanagement.service.mappers.ProductMapper;
 import jakarta.transaction.Transactional;
@@ -17,11 +18,13 @@ import java.util.Optional;
 class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final PriceHistoryService priceHistoryService;
     private final ProductMapper productMapper = new ProductMapper();
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, PriceHistoryService priceHistoryService) {
         this.productRepository = productRepository;
+        this.priceHistoryService = priceHistoryService;
     }
 
     @Override
@@ -46,6 +49,16 @@ class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO saveProduct(ProductDTO productDTO) {
         ProductDO savedProductDO = productRepository.save(productMapper.mapDtoToDo(productDTO));
-        return productMapper.mapDoToDto(savedProductDO);
+        ProductDTO savedProductDTO = productMapper.mapDoToDto(savedProductDO);
+
+        PriceHistoryDTO priceHistoryDTO = PriceHistoryDTO.builder()
+                .price(productDTO.getCurrentPrice())
+                .productDTO(savedProductDTO)
+                .build();
+
+        PriceHistoryDTO savedPriceHistoryDTO = priceHistoryService.savePriceHistory(priceHistoryDTO);
+        savedProductDTO.setPriceHistoryList(List.of(savedPriceHistoryDTO));
+
+        return savedProductDTO;
     }
 }

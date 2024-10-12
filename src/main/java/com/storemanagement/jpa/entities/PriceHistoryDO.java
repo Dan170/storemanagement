@@ -6,11 +6,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Table(name = "PRICE_HISTORY")
 @Entity
 @Getter
+@Setter
 @SuperBuilder
 @RequiredArgsConstructor
 public class PriceHistoryDO extends AbstractDO {

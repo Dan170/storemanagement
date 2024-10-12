@@ -26,12 +26,14 @@ public class PriceHistoryMapper {
 
     public PriceHistoryDO mapDtoToDo(PriceHistoryDTO priceHistoryDTO) {
         if (isNull(priceHistoryDTO)) {
-            return null;
+            return new PriceHistoryDO();
         }
 
         return PriceHistoryDO.builder()
                 .id(priceHistoryDTO.getId())
                 .price(priceHistoryDTO.getPrice())
+                .createdOn(priceHistoryDTO.getCreatedOn())
+                .updatedOn(priceHistoryDTO.getUpdatedOn())
                 .build();
     }
 

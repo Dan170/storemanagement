@@ -3,7 +3,6 @@ package com.storemanagement.jpa.entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -36,14 +35,6 @@ public class ProductDO extends AbstractDO {
 
     @OneToMany(mappedBy = "productDO", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PriceHistoryDO> priceHistoryDOs = new ArrayList<>();
-
-    @PrePersist
-    protected void onCreate() {
-        super.onCreate();
-
-        PriceHistoryDO oldPrice = new PriceHistoryDO(this.currentPrice, this);
-        this.priceHistoryDOs.add(oldPrice);
-    }
 
     @PreUpdate
     protected void onUpdate() {

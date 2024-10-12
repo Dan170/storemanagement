@@ -16,6 +16,7 @@ public class PriceHistoryDTO {
 
     private long id;
     private double price;
+    @JsonIgnore private ProductDTO productDTO;
     @JsonIgnore private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 }
