@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Getter
 @SuperBuilder
-public class PriceHistory extends AbstractDO {
+public class PriceHistoryDO extends AbstractDO {
 
     private double price;
 
@@ -19,7 +19,7 @@ public class PriceHistory extends AbstractDO {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductDO productDO;
 
-    public PriceHistory(double price) {
+    public PriceHistoryDO(double price) {
         super();
         this.price = price;
     }

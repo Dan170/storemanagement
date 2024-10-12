@@ -1,8 +1,6 @@
 package com.storemanagement.jpa.entities;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -25,7 +23,6 @@ public class ProductDO extends AbstractDO {
 
     private String description;
 
-    @Column(name = "rating")
     private double rating;
 
     private long quantity;
@@ -33,7 +30,7 @@ public class ProductDO extends AbstractDO {
     private double weight;
 
     @OneToMany(mappedBy = "productDO", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PriceHistory> priceHistory;
+    private List<PriceHistoryDO> priceHistoryDO;
 
     @PrePersist
     protected void onCreate() {
@@ -44,8 +41,8 @@ public class ProductDO extends AbstractDO {
     @PreUpdate
     protected void onUpdate() {
         super.onUpdate();
-        PriceHistory oldPrice = new PriceHistory(this.currentPrice);
-        this.priceHistory.add(oldPrice);
+        PriceHistoryDO oldPrice = new PriceHistoryDO(this.currentPrice);
+        this.priceHistoryDO.add(oldPrice);
     }
 
 //    add manyToOne to a review table

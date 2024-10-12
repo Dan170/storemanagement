@@ -1,7 +1,8 @@
 package com.storemanagement.service.services;
 
-import org.springframework.stereotype.Service;
+import com.storemanagement.service.dtos.ProductDTO;
 
-@Service
-public class ProductService {
+public interface ProductService {
+
+    ProductDTO getById(long id);
 }

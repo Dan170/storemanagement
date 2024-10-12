@@ -3,10 +3,13 @@ package com.storemanagement.service.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ProductDTO {
@@ -15,7 +18,7 @@ public class ProductDTO {
 
     private String name;
 
-    private double price;
+    private double currentPrice;
 
     private String description;
 
@@ -24,6 +27,8 @@ public class ProductDTO {
     private long quantity;
 
     private double weight;
+
+    private List<PriceHistoryDTO> priceHistoryList;
 
     private LocalDateTime createdOn;
 
