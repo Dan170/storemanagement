@@ -17,6 +17,8 @@ import java.util.Optional;
 @Transactional
 class ProductServiceImpl implements ProductService {
 
+    private final static long INVALID_ID = -1;
+
     private final ProductRepository productRepository;
     private final PriceHistoryService priceHistoryService;
     private final ProductMapper productMapper = new ProductMapper();
@@ -31,7 +33,7 @@ class ProductServiceImpl implements ProductService {
     public ProductDTO getById(long id) {
         Optional<ProductDO> productDO = productRepository.findById(id);
         if (productDO.isEmpty()) {
-            return new ProductDTO();
+            return ProductDTO.builder().id(INVALID_ID).build();
         }
         return productMapper.mapDoToDto(productDO.get());
     }
@@ -48,6 +50,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO saveProduct(ProductDTO productDTO) {
+        productDTO.setId(0);
         ProductDO savedProductDO = productRepository.save(productMapper.mapDtoToDo(productDTO));
         ProductDTO savedProductDTO = productMapper.mapDoToDto(savedProductDO);
 
@@ -60,5 +63,17 @@ class ProductServiceImpl implements ProductService {
         savedProductDTO.setPriceHistoryList(List.of(savedPriceHistoryDTO));
 
         return savedProductDTO;
+    }
+
+    @Override
+    public ProductDTO updateProduct(long productId, ProductDTO productDTO) {
+        ProductDTO existingProduct = getById(productId);
+        if (existingProduct.getId() == INVALID_ID) {
+            return ProductDTO.builder().id(INVALID_ID).build();
+        }
+        
+        productDTO.setId(productId);
+        ProductDO savedProductDO = productRepository.save(productMapper.mapDtoToDo(productDTO));
+        return productMapper.mapDoToDto(savedProductDO);
     }
 }
