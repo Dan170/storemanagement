@@ -5,12 +5,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Table(name = "PRICE_HISTORY")
 @Entity
 @Getter
 @SuperBuilder
+@RequiredArgsConstructor
 public class PriceHistoryDO extends AbstractDO {
 
     private double price;

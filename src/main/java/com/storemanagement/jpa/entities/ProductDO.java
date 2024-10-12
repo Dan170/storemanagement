@@ -32,7 +32,7 @@ public class ProductDO extends AbstractDO {
     private double weight;
 
     @OneToMany(mappedBy = "productDO", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PriceHistoryDO> priceHistoryDO;
+    private List<PriceHistoryDO> priceHistoryDOs;
 
     @PrePersist
     protected void onCreate() {
@@ -44,7 +44,7 @@ public class ProductDO extends AbstractDO {
     protected void onUpdate() {
         super.onUpdate();
         PriceHistoryDO oldPrice = new PriceHistoryDO(this.currentPrice);
-        this.priceHistoryDO.add(oldPrice);
+        this.priceHistoryDOs.add(oldPrice);
     }
 
 //    add manyToOne to a review table

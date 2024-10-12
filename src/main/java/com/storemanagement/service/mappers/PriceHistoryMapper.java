@@ -1,4 +1,43 @@
 package com.storemanagement.service.mappers;
 
+import com.storemanagement.jpa.entities.PriceHistoryDO;
+import com.storemanagement.service.dtos.PriceHistoryDTO;
+
+import java.util.List;
+
+import static java.util.Objects.isNull;
+
 public class PriceHistoryMapper {
+
+    public List<PriceHistoryDO> mapDtoToDo(List<PriceHistoryDTO> priceHistoryDTOs) {
+        return priceHistoryDTOs.stream().map(this::mapDtoToDo).toList();
+    }
+
+    public List<PriceHistoryDTO> mapDoToDto(List<PriceHistoryDO> priceHistoryDOs) {
+        return priceHistoryDOs.stream().map(this::mapDoToDto).toList();
+    }
+
+    public PriceHistoryDO mapDtoToDo(PriceHistoryDTO priceHistoryDTO) {
+        if (isNull(priceHistoryDTO)) {
+            return null;
+        }
+
+        return PriceHistoryDO.builder()
+                .id(priceHistoryDTO.getId())
+                .price(priceHistoryDTO.getPrice())
+                .build();
+    }
+
+    public PriceHistoryDTO mapDoToDto(PriceHistoryDO priceHistoryDO) {
+        if (isNull(priceHistoryDO)) {
+            return new PriceHistoryDTO();
+        }
+
+        return PriceHistoryDTO.builder()
+                .id(priceHistoryDO.getId())
+                .price(priceHistoryDO.getPrice())
+                .createdOn(priceHistoryDO.getCreatedOn())
+                .updatedOn(priceHistoryDO.getUpdatedOn())
+                .build();
+    }
 }

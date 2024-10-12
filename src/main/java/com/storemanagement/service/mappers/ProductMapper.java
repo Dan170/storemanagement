@@ -10,6 +10,8 @@ import static java.util.Objects.isNull;
 
 public class ProductMapper {
 
+    private final PriceHistoryMapper priceHistoryMapper = new PriceHistoryMapper();
+
     public List<ProductDO> mapDtoToDo(List<ProductDTO> productDTOs) {
         return productDTOs.stream().map(this::mapDtoToDo).toList();
     }
@@ -39,7 +41,7 @@ public class ProductMapper {
             return new ProductDTO();
         }
 
-        List<PriceHistoryDTO> priceHistoryDTOs;
+        List<PriceHistoryDTO> priceHistoryDTOs = priceHistoryMapper.mapDoToDto(productDO.getPriceHistoryDOs());
 
         return ProductDTO.builder()
                 .id(productDO.getId())
@@ -49,6 +51,7 @@ public class ProductMapper {
                 .rating(productDO.getRating())
                 .quantity(productDO.getQuantity())
                 .weight(productDO.getWeight())
+                .priceHistoryList(priceHistoryDTOs)
                 .createdOn(productDO.getCreatedOn())
                 .updatedOn(productDO.getUpdatedOn())
                 .build();
