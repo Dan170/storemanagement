@@ -33,6 +33,7 @@ public class ProductMapper {
                 .rating(productDTO.getRating())
                 .quantity(productDTO.getQuantity())
                 .weight(productDTO.getWeight())
+                .archived(productDTO.isArchived())
                 .build();
     }
 
@@ -51,6 +52,7 @@ public class ProductMapper {
                 .rating(productDO.getRating())
                 .quantity(productDO.getQuantity())
                 .weight(productDO.getWeight())
+                .archived(productDO.isArchived())
                 .priceHistoryList(priceHistoryDTOs)
                 .createdOn(productDO.getCreatedOn())
                 .updatedOn(productDO.getUpdatedOn())

@@ -31,6 +31,8 @@ public class ProductDO extends AbstractDO {
 
     private double weight;
 
+    private boolean archived;
+
     @OneToMany(mappedBy = "productDO", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PriceHistoryDO> priceHistoryDOs;
 
@@ -38,6 +40,7 @@ public class ProductDO extends AbstractDO {
     protected void onCreate() {
         super.onCreate();
         this.rating = 0.0;
+        this.archived = false;
     }
 
     @PreUpdate

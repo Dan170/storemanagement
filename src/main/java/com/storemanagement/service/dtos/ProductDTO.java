@@ -21,6 +21,7 @@ public class ProductDTO {
     private double rating;
     private long quantity;
     private double weight;
+    private boolean archived;
     private List<PriceHistoryDTO> priceHistoryList;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
