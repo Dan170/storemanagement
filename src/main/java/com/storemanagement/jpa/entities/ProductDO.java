@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "PRODUCT")
@@ -34,20 +35,30 @@ public class ProductDO extends AbstractDO {
     private boolean archived;
 
     @OneToMany(mappedBy = "productDO", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PriceHistoryDO> priceHistoryDOs;
+    private List<PriceHistoryDO> priceHistoryDOs = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
         super.onCreate();
-        this.rating = 0.0;
-        this.archived = false;
+
+        PriceHistoryDO oldPrice = new PriceHistoryDO(this.currentPrice, this);
+        this.priceHistoryDOs.add(oldPrice);
     }
 
     @PreUpdate
     protected void onUpdate() {
         super.onUpdate();
-        PriceHistoryDO oldPrice = new PriceHistoryDO(this.currentPrice);
-        this.priceHistoryDOs.add(oldPrice);
+
+        if (this.priceHistoryDOs == null || this.priceHistoryDOs.isEmpty()) {
+            PriceHistoryDO priceHistory = new PriceHistoryDO(this.currentPrice, this);
+            this.priceHistoryDOs.add(priceHistory);
+        } else {
+            PriceHistoryDO lastHistory = this.priceHistoryDOs.get(this.priceHistoryDOs.size() - 1);
+            if (lastHistory.getPrice() != this.currentPrice) {
+                PriceHistoryDO priceHistory = new PriceHistoryDO(this.currentPrice, this);
+                this.priceHistoryDOs.add(priceHistory);
+            }
+        }
     }
 
 //    add manyToOne to a review table

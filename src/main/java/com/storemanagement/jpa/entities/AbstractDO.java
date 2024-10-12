@@ -22,7 +22,7 @@ public abstract class AbstractDO {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private long id;
+    private Long id;
 
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;

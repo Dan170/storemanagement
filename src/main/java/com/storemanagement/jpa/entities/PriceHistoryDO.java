@@ -21,8 +21,9 @@ public class PriceHistoryDO extends AbstractDO {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductDO productDO;
 
-    public PriceHistoryDO(double price) {
+    public PriceHistoryDO(double price, ProductDO productDO) {
         super();
         this.price = price;
+        this.productDO = productDO;
     }
 }

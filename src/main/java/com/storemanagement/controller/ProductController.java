@@ -5,6 +5,8 @@ import com.storemanagement.service.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +31,10 @@ public class ProductController {
     @GetMapping(path = "/{productId}")
     public ProductDTO getProductById(@PathVariable Long productId) {
         return productService.getById(productId);
+    }
+
+    @PostMapping
+    public ProductDTO saveProduct(@RequestBody ProductDTO productDTO) {
+        return productService.saveProduct(productDTO);
     }
 }

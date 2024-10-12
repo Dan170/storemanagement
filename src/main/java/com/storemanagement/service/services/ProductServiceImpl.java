@@ -4,6 +4,7 @@ import com.storemanagement.jpa.entities.ProductDO;
 import com.storemanagement.jpa.repositories.ProductRepository;
 import com.storemanagement.service.dtos.ProductDTO;
 import com.storemanagement.service.mappers.ProductMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
@@ -39,5 +41,11 @@ class ProductServiceImpl implements ProductService {
             productDTOs.add(productMapper.mapDoToDto(productDO));
         }
         return productDTOs;
+    }
+
+    @Override
+    public ProductDTO saveProduct(ProductDTO productDTO) {
+        ProductDO savedProductDO = productRepository.save(productMapper.mapDtoToDo(productDTO));
+        return productMapper.mapDoToDto(savedProductDO);
     }
 }

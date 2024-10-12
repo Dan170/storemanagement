@@ -1,7 +1,7 @@
-INSERT INTO PRODUCT (id, name, current_price, description, rating, quantity, weight, archived, created_on, updated_on)
+INSERT INTO PRODUCT (name, current_price, description, rating, quantity, weight, archived, created_on, updated_on)
 VALUES
-(1, 'Basketball', 15, 'Sports item', 0, 15, 500, false, now(), now());
+('Basketball', 15, 'Sports item', 0, 15, 500, false, now(), now());
 
 INSERT INTO PRICE_HISTORY (id, price, product_id, created_on, updated_on)
 VALUES
-(1, 15, 1, now(), now());
+(1, 15, (SELECT id FROM PRODUCT WHERE name = 'Basketball'), now(), now());

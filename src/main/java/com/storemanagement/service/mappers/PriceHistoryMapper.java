@@ -5,15 +5,22 @@ import com.storemanagement.service.dtos.PriceHistoryDTO;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 
 public class PriceHistoryMapper {
 
     public List<PriceHistoryDO> mapDtoToDo(List<PriceHistoryDTO> priceHistoryDTOs) {
+        if (isNull(priceHistoryDTOs) || priceHistoryDTOs.isEmpty()) {
+            return emptyList();
+        }
         return priceHistoryDTOs.stream().map(this::mapDtoToDo).toList();
     }
 
     public List<PriceHistoryDTO> mapDoToDto(List<PriceHistoryDO> priceHistoryDOs) {
+        if (isNull(priceHistoryDOs) || priceHistoryDOs.isEmpty()) {
+            return emptyList();
+        }
         return priceHistoryDOs.stream().map(this::mapDoToDto).toList();
     }
 

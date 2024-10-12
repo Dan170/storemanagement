@@ -6,6 +6,7 @@ import com.storemanagement.service.dtos.ProductDTO;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 
 public class ProductMapper {
@@ -13,16 +14,22 @@ public class ProductMapper {
     private final PriceHistoryMapper priceHistoryMapper = new PriceHistoryMapper();
 
     public List<ProductDO> mapDtoToDo(List<ProductDTO> productDTOs) {
+        if (productDTOs.isEmpty()) {
+            return emptyList();
+        }
         return productDTOs.stream().map(this::mapDtoToDo).toList();
     }
 
     public List<ProductDTO> mapDoToDto(List<ProductDO> productDOs) {
+        if (productDOs.isEmpty()) {
+            return emptyList();
+        }
         return productDOs.stream().map(this::mapDoToDto).toList();
     }
 
     public ProductDO mapDtoToDo(ProductDTO productDTO) {
         if (isNull(productDTO)) {
-            return null;
+            return new ProductDO();
         }
 
         return ProductDO.builder()
@@ -34,6 +41,7 @@ public class ProductMapper {
                 .quantity(productDTO.getQuantity())
                 .weight(productDTO.getWeight())
                 .archived(productDTO.isArchived())
+                .priceHistoryDOs(priceHistoryMapper.mapDtoToDo(productDTO.getPriceHistoryList()))
                 .build();
     }
 
