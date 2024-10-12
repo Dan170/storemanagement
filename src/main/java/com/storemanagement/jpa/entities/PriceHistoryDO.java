@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
-@Table(name = "price_history")
+@Table(name = "PRICE_HISTORY")
 @Entity
 @Getter
 @SuperBuilder

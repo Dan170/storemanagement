@@ -7,10 +7,12 @@ import com.storemanagement.service.mappers.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper = new ProductMapper();
@@ -26,6 +28,16 @@ public class ProductServiceImpl implements ProductService {
         if (productDO.isEmpty()) {
             return new ProductDTO();
         }
-        return productMapper.mapDoToDTo(productDO.get());
+        return productMapper.mapDoToDto(productDO.get());
+    }
+
+    @Override
+    public List<ProductDTO> getAllProducts() {
+        Iterable<ProductDO> iterableProductDOs = productRepository.findAll();
+        List<ProductDTO> productDTOs = new ArrayList<>();
+        for (ProductDO productDO : iterableProductDOs) {
+            productDTOs.add(productMapper.mapDoToDto(productDO));
+        }
+        return productDTOs;
     }
 }

@@ -7,14 +7,16 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Table(name = "product")
+@Table(name = "PRODUCT")
 @Entity
 @Getter
 @SuperBuilder
+@RequiredArgsConstructor
 public class ProductDO extends AbstractDO {
 
     private String name;

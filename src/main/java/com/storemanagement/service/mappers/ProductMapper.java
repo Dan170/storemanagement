@@ -1,12 +1,25 @@
 package com.storemanagement.service.mappers;
 
 import com.storemanagement.jpa.entities.ProductDO;
+import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
+
+import java.util.List;
+
+import static java.util.Objects.isNull;
 
 public class ProductMapper {
 
+    public List<ProductDO> mapDtoToDo(List<ProductDTO> productDTOs) {
+        return productDTOs.stream().map(this::mapDtoToDo).toList();
+    }
+
+    public List<ProductDTO> mapDoToDto(List<ProductDO> productDOs) {
+        return productDOs.stream().map(this::mapDoToDto).toList();
+    }
+
     public ProductDO mapDtoToDo(ProductDTO productDTO) {
-        if (productDTO == null) {
+        if (isNull(productDTO)) {
             return null;
         }
 
@@ -21,10 +34,12 @@ public class ProductMapper {
                 .build();
     }
 
-    public ProductDTO mapDoToDTo(ProductDO productDO) {
-        if (productDO == null) {
-            return null;
+    public ProductDTO mapDoToDto(ProductDO productDO) {
+        if (isNull(productDO)) {
+            return new ProductDTO();
         }
+
+        List<PriceHistoryDTO> priceHistoryDTOs;
 
         return ProductDTO.builder()
                 .id(productDO.getId())
@@ -34,6 +49,8 @@ public class ProductMapper {
                 .rating(productDO.getRating())
                 .quantity(productDO.getQuantity())
                 .weight(productDO.getWeight())
+                .createdOn(productDO.getCreatedOn())
+                .updatedOn(productDO.getUpdatedOn())
                 .build();
     }
 }
