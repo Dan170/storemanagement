@@ -6,6 +6,7 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import static java.time.LocalDateTime.now;
 @MappedSuperclass
 @Getter
 @SuperBuilder
+@RequiredArgsConstructor
 public abstract class AbstractDO {
 
     @Id
