@@ -61,23 +61,44 @@ class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(long productId, ProductDTO productToUpdate) {
+    public ProductDTO updateProduct(long productId, ProductDTO productWithUpdates) {
         ProductDTO existingProduct = getById(productId);
         if (existingProduct.getId() == INVALID_ID) {
             return ProductDTO.builder().id(INVALID_ID).build();
         }
 
-        List<PriceHistoryDTO> priceHistory = new ArrayList<>(existingProduct.getPriceHistoryList());
-        if (productToUpdate.getCurrentPrice() != existingProduct.getCurrentPrice()) {
-            PriceHistoryDTO savedPriceHistory = savePriceHistory(productToUpdate.getCurrentPrice(), productId);
-            priceHistory.add(savedPriceHistory);
+        return updateProductAndHistory(existingProduct, productWithUpdates);
+    }
+
+    @Override
+    public ProductDTO updatePrice(long productId, double newPrice) {
+        ProductDTO existingProduct = getById(productId);
+        if (existingProduct.getId() == INVALID_ID) {
+            return ProductDTO.builder().id(INVALID_ID).build();
         }
 
-        productToUpdate.setId(productId);
-        productToUpdate.setPriceHistoryList(priceHistory);
-        productToUpdate.setCreatedOn(existingProduct.getCreatedOn());
-        ProductDO savedProductDO = productRepository.save(productMapper.mapDtoToDo(productToUpdate));
+        ProductDTO productWithNewPrice = productMapper.mapDtoToDto(existingProduct);
+        productWithNewPrice.setCurrentPrice(newPrice);
+        return updateProductAndHistory(existingProduct, productWithNewPrice);
+    }
+
+    private ProductDTO updateProductAndHistory(ProductDTO existingProduct, ProductDTO productWithUpdates) {
+        List<PriceHistoryDTO> priceHistory = updatePriceHistory(existingProduct, productWithUpdates.getCurrentPrice());
+
+        productWithUpdates.setId(existingProduct.getId());
+        productWithUpdates.setPriceHistoryList(priceHistory);
+        productWithUpdates.setCreatedOn(existingProduct.getCreatedOn());
+        ProductDO savedProductDO = productRepository.save(productMapper.mapDtoToDo(productWithUpdates));
         return productMapper.mapDoToDto(savedProductDO);
+    }
+
+    private List<PriceHistoryDTO> updatePriceHistory(ProductDTO existingProduct, double newPrice) {
+        List<PriceHistoryDTO> priceHistory = new ArrayList<>(existingProduct.getPriceHistoryList());
+        if (newPrice != existingProduct.getCurrentPrice()) {
+            PriceHistoryDTO savedPriceHistory = savePriceHistory(newPrice, existingProduct.getId());
+            priceHistory.add(savedPriceHistory);
+        }
+        return priceHistory;
     }
 
     private PriceHistoryDTO savePriceHistory(double currentPrice, long productId) {

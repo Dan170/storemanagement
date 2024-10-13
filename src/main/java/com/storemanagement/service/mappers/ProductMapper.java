@@ -27,6 +27,26 @@ public class ProductMapper {
         return productDOs.stream().map(this::mapDoToDto).toList();
     }
 
+    public ProductDTO mapDtoToDto(ProductDTO productDTO) {
+        if (isNull(productDTO)) {
+            return new ProductDTO();
+        }
+
+        return ProductDTO.builder()
+                .id(productDTO.getId())
+                .name(productDTO.getName())
+                .currentPrice(productDTO.getCurrentPrice())
+                .description(productDTO.getDescription())
+                .rating(productDTO.getRating())
+                .quantity(productDTO.getQuantity())
+                .weight(productDTO.getWeight())
+                .archived(productDTO.isArchived())
+                .priceHistoryList(productDTO.getPriceHistoryList())
+                .createdOn(productDTO.getCreatedOn())
+                .updatedOn(productDTO.getUpdatedOn())
+                .build();
+    }
+
     public ProductDO mapDtoToDo(ProductDTO productDTO) {
         if (isNull(productDTO)) {
             return new ProductDO();

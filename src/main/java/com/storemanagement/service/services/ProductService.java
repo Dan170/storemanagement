@@ -13,4 +13,6 @@ public interface ProductService {
     ProductDTO saveProduct(ProductDTO productDTO);
 
     ProductDTO updateProduct(long productId, ProductDTO productDTO);
+
+    ProductDTO updatePrice(long productId, double newPrice);
 }
