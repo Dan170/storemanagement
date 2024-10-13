@@ -1,4 +1,4 @@
-package com.storemanagement.controller;
+package com.storemanagement.web.controller;
 
 import com.storemanagement.service.dtos.ProductDTO;
 import com.storemanagement.service.services.ProductService;
@@ -37,7 +37,6 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         List<ProductDTO> foundProducts = productService.getAllProducts();
-        LOGGER.info("Executed method [{}] with status [{}]", "getAllProducts", HttpStatus.OK);
         return ResponseEntity.ok(foundProducts);
     }
 
@@ -45,6 +44,7 @@ public class ProductController {
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
         ProductDTO foundProduct = productService.getById(productId);
         if (hasInvalidId(foundProduct)) {
+            logNoProductFound(productId);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(foundProduct);
@@ -60,6 +60,7 @@ public class ProductController {
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO productDTO) {
         ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
         if (hasInvalidId(updatedProduct)) {
+            logNoProductFound(productId);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedProduct);
@@ -69,8 +70,13 @@ public class ProductController {
     public ResponseEntity<ProductDTO> updatePrice(@PathVariable Long productId, @RequestParam double price) {
         ProductDTO updatedProduct = productService.updatePrice(productId, price);
         if (hasInvalidId(updatedProduct)) {
+            logNoProductFound(productId);
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    private void logNoProductFound(long productId) {
+        LOGGER.warn("No Product with id [{}] was found", productId);
     }
 }

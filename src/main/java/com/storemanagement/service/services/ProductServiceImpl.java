@@ -6,6 +6,8 @@ import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
 import com.storemanagement.service.mappers.ProductMapper;
 import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ import static com.storemanagement.utils.ProductUtils.INVALID_ID;
 @Service
 @Transactional
 class ProductServiceImpl implements ProductService {
+
+    private static final Logger LOGGER = LogManager.getLogger(ProductServiceImpl.class);
 
     private final ProductRepository productRepository;
     private final PriceHistoryService priceHistoryService;
@@ -31,7 +35,11 @@ class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO getById(long id) {
         return productRepository.findById(id)
-                .map(productMapper::mapDoToDto)
+                .map(product -> {
+                    var savedProduct = productMapper.mapDoToDto(product);
+                    LOGGER.info("Retrieved Product with id [{}]", id);
+                    return savedProduct;
+                })
                 .orElseGet(() -> ProductDTO.builder().id(INVALID_ID).build());
     }
 
@@ -42,6 +50,8 @@ class ProductServiceImpl implements ProductService {
         for (var productDO : iterableProductDOs) {
             productDTOs.add(productMapper.mapDoToDto(productDO));
         }
+        LOGGER.info("Retrieved Products with ids {}",
+                productDTOs.stream().map(ProductDTO::getId).toList());
         return productDTOs;
     }
 
@@ -53,6 +63,7 @@ class ProductServiceImpl implements ProductService {
         var savedPriceHistory = savePriceHistory(productDTO.getCurrentPrice(), savedProductDTO.getId());
         savedProductDTO.setPriceHistoryList(List.of(savedPriceHistory));
 
+        LOGGER.info("Saved Product with id [{}]", savedProductDTO.getId());
         return savedProductDTO;
     }
 
@@ -79,21 +90,26 @@ class ProductServiceImpl implements ProductService {
     }
 
     private ProductDTO updateProductAndHistory(ProductDTO existingProduct, ProductDTO productWithUpdates) {
+        LOGGER.info("Updating Product with id [{}]", existingProduct.getId());
         List<PriceHistoryDTO> priceHistory = updatePriceHistory(existingProduct, productWithUpdates.getCurrentPrice());
 
         productWithUpdates.setId(existingProduct.getId());
         productWithUpdates.setPriceHistoryList(priceHistory);
         productWithUpdates.setCreatedOn(existingProduct.getCreatedOn());
         var savedProductDO = productRepository.save(productMapper.mapDtoToDo(productWithUpdates));
+        LOGGER.info("Updated Product with id [{}]", savedProductDO.getId());
         return productMapper.mapDoToDto(savedProductDO);
     }
 
     private List<PriceHistoryDTO> updatePriceHistory(ProductDTO existingProduct, double newPrice) {
         List<PriceHistoryDTO> priceHistory = new ArrayList<>(existingProduct.getPriceHistoryList());
-        if (newPrice != existingProduct.getCurrentPrice()) {
-            var savedPriceHistory = savePriceHistory(newPrice, existingProduct.getId());
-            priceHistory.add(savedPriceHistory);
+
+        if (newPrice == existingProduct.getCurrentPrice()) {
+            LOGGER.warn("Old price is equal to new price, will not update Price History");
+            return priceHistory;
         }
+        var savedPriceHistory = savePriceHistory(newPrice, existingProduct.getId());
+        priceHistory.add(savedPriceHistory);
         return priceHistory;
     }
 
