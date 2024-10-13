@@ -1,6 +1,5 @@
 package com.storemanagement.service.services;
 
-import com.storemanagement.jpa.entities.PriceHistoryDO;
 import com.storemanagement.jpa.repositories.PriceHistoryRepository;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.mappers.PriceHistoryMapper;
@@ -21,8 +20,8 @@ class PriceHistoryServiceImpl implements PriceHistoryService {
     @Override
     public PriceHistoryDTO savePriceHistory(PriceHistoryDTO priceHistoryDTO) {
         priceHistoryDTO.setId(0);
-        PriceHistoryDO priceHistoryDO = priceHistoryMapper.mapDtoToDo(priceHistoryDTO);
-        PriceHistoryDO savedPriceHistory = priceHistoryRepository.save(priceHistoryDO);
+        var priceHistoryDO = priceHistoryMapper.mapDtoToDo(priceHistoryDTO);
+        var savedPriceHistory = priceHistoryRepository.save(priceHistoryDO);
         return priceHistoryMapper.mapDoToDto(savedPriceHistory);
     }
 }

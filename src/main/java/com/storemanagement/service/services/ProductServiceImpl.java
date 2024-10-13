@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.storemanagement.utils.ProductUtils.INVALID_ID;
 
@@ -31,18 +30,16 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getById(long id) {
-        Optional<ProductDO> productDO = productRepository.findById(id);
-        if (productDO.isEmpty()) {
-            return ProductDTO.builder().id(INVALID_ID).build();
-        }
-        return productMapper.mapDoToDto(productDO.get());
+        return productRepository.findById(id)
+                .map(productMapper::mapDoToDto)
+                .orElseGet(() -> ProductDTO.builder().id(INVALID_ID).build());
     }
 
     @Override
     public List<ProductDTO> getAllProducts() {
         Iterable<ProductDO> iterableProductDOs = productRepository.findAll();
         List<ProductDTO> productDTOs = new ArrayList<>();
-        for (ProductDO productDO : iterableProductDOs) {
+        for (var productDO : iterableProductDOs) {
             productDTOs.add(productMapper.mapDoToDto(productDO));
         }
         return productDTOs;
@@ -51,10 +48,9 @@ class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO saveProduct(ProductDTO productDTO) {
         productDTO.setId(0);
-        ProductDO savedProductDO = productRepository.save(productMapper.mapDtoToDo(productDTO));
-        ProductDTO savedProductDTO = productMapper.mapDoToDto(savedProductDO);
-
-        PriceHistoryDTO savedPriceHistory = savePriceHistory(productDTO.getCurrentPrice(), savedProductDTO.getId());
+        var savedProductDO = productRepository.save(productMapper.mapDtoToDo(productDTO));
+        var savedProductDTO = productMapper.mapDoToDto(savedProductDO);
+        var savedPriceHistory = savePriceHistory(productDTO.getCurrentPrice(), savedProductDTO.getId());
         savedProductDTO.setPriceHistoryList(List.of(savedPriceHistory));
 
         return savedProductDTO;
@@ -62,7 +58,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(long productId, ProductDTO productWithUpdates) {
-        ProductDTO existingProduct = getById(productId);
+        var existingProduct = getById(productId);
         if (existingProduct.getId() == INVALID_ID) {
             return ProductDTO.builder().id(INVALID_ID).build();
         }
@@ -72,12 +68,12 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updatePrice(long productId, double newPrice) {
-        ProductDTO existingProduct = getById(productId);
+        var existingProduct = getById(productId);
         if (existingProduct.getId() == INVALID_ID) {
             return ProductDTO.builder().id(INVALID_ID).build();
         }
 
-        ProductDTO productWithNewPrice = productMapper.mapDtoToDto(existingProduct);
+        var productWithNewPrice = productMapper.mapDtoToDto(existingProduct);
         productWithNewPrice.setCurrentPrice(newPrice);
         return updateProductAndHistory(existingProduct, productWithNewPrice);
     }
@@ -88,21 +84,21 @@ class ProductServiceImpl implements ProductService {
         productWithUpdates.setId(existingProduct.getId());
         productWithUpdates.setPriceHistoryList(priceHistory);
         productWithUpdates.setCreatedOn(existingProduct.getCreatedOn());
-        ProductDO savedProductDO = productRepository.save(productMapper.mapDtoToDo(productWithUpdates));
+        var savedProductDO = productRepository.save(productMapper.mapDtoToDo(productWithUpdates));
         return productMapper.mapDoToDto(savedProductDO);
     }
 
     private List<PriceHistoryDTO> updatePriceHistory(ProductDTO existingProduct, double newPrice) {
         List<PriceHistoryDTO> priceHistory = new ArrayList<>(existingProduct.getPriceHistoryList());
         if (newPrice != existingProduct.getCurrentPrice()) {
-            PriceHistoryDTO savedPriceHistory = savePriceHistory(newPrice, existingProduct.getId());
+            var savedPriceHistory = savePriceHistory(newPrice, existingProduct.getId());
             priceHistory.add(savedPriceHistory);
         }
         return priceHistory;
     }
 
     private PriceHistoryDTO savePriceHistory(double currentPrice, long productId) {
-        PriceHistoryDTO priceHistoryDTO = PriceHistoryDTO.builder()
+        var priceHistoryDTO = PriceHistoryDTO.builder()
                 .price(currentPrice)
                 .productId(productId)
                 .build();

@@ -2,6 +2,8 @@ package com.storemanagement.controller;
 
 import com.storemanagement.service.dtos.ProductDTO;
 import com.storemanagement.service.services.ProductService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import static com.storemanagement.utils.ProductUtils.hasInvalidId;
 @RequestMapping("/products")
 public class ProductController {
 
+    private static final Logger LOGGER = LogManager.getLogger(ProductController.class);
+
     private final ProductService productService;
 
     @Autowired
@@ -33,6 +37,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
         List<ProductDTO> foundProducts = productService.getAllProducts();
+        LOGGER.info("Executed method [{}] with status [{}]", "getAllProducts", HttpStatus.OK);
         return ResponseEntity.ok(foundProducts);
     }
 
