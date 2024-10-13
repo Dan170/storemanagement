@@ -2,8 +2,8 @@ package com.storemanagement.jpa.entities;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,24 +33,9 @@ public class ProductDO extends AbstractDO {
 
     private boolean archived;
 
-    @OneToMany(mappedBy = "productDO", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "product_id")
     private List<PriceHistoryDO> priceHistoryDOs = new ArrayList<>();
-
-    @PreUpdate
-    protected void onUpdate() {
-        super.onUpdate();
-
-        if (this.priceHistoryDOs == null || this.priceHistoryDOs.isEmpty()) {
-            PriceHistoryDO priceHistory = new PriceHistoryDO(this.currentPrice, this);
-            this.priceHistoryDOs.add(priceHistory);
-        } else {
-            PriceHistoryDO lastHistory = this.priceHistoryDOs.get(this.priceHistoryDOs.size() - 1);
-            if (lastHistory.getPrice() != this.currentPrice) {
-                PriceHistoryDO priceHistory = new PriceHistoryDO(this.currentPrice, this);
-                this.priceHistoryDOs.add(priceHistory);
-            }
-        }
-    }
 
 //    add manyToOne to a review table
 //    private List<Review> reviews;

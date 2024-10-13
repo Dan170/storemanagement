@@ -32,6 +32,7 @@ public class PriceHistoryMapper {
         return PriceHistoryDO.builder()
                 .id(priceHistoryDTO.getId())
                 .price(priceHistoryDTO.getPrice())
+                .productId(priceHistoryDTO.getProductId())
                 .createdOn(priceHistoryDTO.getCreatedOn())
                 .updatedOn(priceHistoryDTO.getUpdatedOn())
                 .build();
@@ -45,6 +46,7 @@ public class PriceHistoryMapper {
         return PriceHistoryDTO.builder()
                 .id(priceHistoryDO.getId())
                 .price(priceHistoryDO.getPrice())
+                .productId(priceHistoryDO.getProductId())
                 .createdOn(priceHistoryDO.getCreatedOn())
                 .updatedOn(priceHistoryDO.getUpdatedOn())
                 .build();

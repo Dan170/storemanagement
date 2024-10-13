@@ -1,5 +1,6 @@
 package com.storemanagement.service.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,6 @@ public class ProductDTO {
     private double weight;
     private boolean archived;
     private List<PriceHistoryDTO> priceHistoryList;
-    private LocalDateTime createdOn;
-    private LocalDateTime updatedOn;
+    @JsonIgnore private LocalDateTime createdOn;
+    @JsonIgnore private LocalDateTime updatedOn;
 }

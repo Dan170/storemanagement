@@ -1,8 +1,7 @@
 package com.storemanagement.jpa.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +18,6 @@ public class PriceHistoryDO extends AbstractDO {
 
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private ProductDO productDO;
-
-    public PriceHistoryDO(double price, ProductDO productDO) {
-        super();
-        this.price = price;
-        this.productDO = productDO;
-    }
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 }

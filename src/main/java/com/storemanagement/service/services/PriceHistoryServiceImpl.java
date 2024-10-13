@@ -4,7 +4,6 @@ import com.storemanagement.jpa.entities.PriceHistoryDO;
 import com.storemanagement.jpa.repositories.PriceHistoryRepository;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.mappers.PriceHistoryMapper;
-import com.storemanagement.service.mappers.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,6 @@ class PriceHistoryServiceImpl implements PriceHistoryService {
 
     private final PriceHistoryRepository priceHistoryRepository;
     private final PriceHistoryMapper priceHistoryMapper = new PriceHistoryMapper();
-    private final ProductMapper productMapper = new ProductMapper();
 
     @Autowired
     public PriceHistoryServiceImpl(PriceHistoryRepository priceHistoryRepository) {
@@ -22,9 +20,8 @@ class PriceHistoryServiceImpl implements PriceHistoryService {
 
     @Override
     public PriceHistoryDTO savePriceHistory(PriceHistoryDTO priceHistoryDTO) {
+        priceHistoryDTO.setId(0);
         PriceHistoryDO priceHistoryDO = priceHistoryMapper.mapDtoToDo(priceHistoryDTO);
-        priceHistoryDO.setProductDO(productMapper.mapDtoToDo(priceHistoryDTO.getProductDTO()));
-
         PriceHistoryDO savedPriceHistory = priceHistoryRepository.save(priceHistoryDO);
         return priceHistoryMapper.mapDoToDto(savedPriceHistory);
     }

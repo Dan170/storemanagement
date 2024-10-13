@@ -42,6 +42,7 @@ public class ProductMapper {
                 .weight(productDTO.getWeight())
                 .archived(productDTO.isArchived())
                 .priceHistoryDOs(priceHistoryMapper.mapDtoToDo(productDTO.getPriceHistoryList()))
+                .createdOn(productDTO.getCreatedOn())
                 .build();
     }
 
