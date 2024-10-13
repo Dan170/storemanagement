@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.storemanagement.utils.ProductUtils.INVALID_ID;
+
 @Service
 @Transactional
 class ProductServiceImpl implements ProductService {
-
-    private final static long INVALID_ID = -1;
 
     private final ProductRepository productRepository;
     private final PriceHistoryService priceHistoryService;
