@@ -5,19 +5,20 @@ import com.storemanagement.service.dtos.PriceHistoryDTO;
 
 import java.util.List;
 
+import static com.storemanagement.utils.ProductUtils.INVALID_ID;
 import static java.util.Collections.emptyList;
 import static java.util.Objects.isNull;
 
 public class PriceHistoryMapper {
 
-    public List<PriceHistoryDO> mapDtoToDo(List<PriceHistoryDTO> priceHistoryDTOs) {
+    public List<PriceHistoryDO> mapDtoToDoList(List<PriceHistoryDTO> priceHistoryDTOs) {
         if (isNull(priceHistoryDTOs) || priceHistoryDTOs.isEmpty()) {
             return emptyList();
         }
         return priceHistoryDTOs.stream().map(this::mapDtoToDo).toList();
     }
 
-    public List<PriceHistoryDTO> mapDoToDto(List<PriceHistoryDO> priceHistoryDOs) {
+    public List<PriceHistoryDTO> mapDoToDtoList(List<PriceHistoryDO> priceHistoryDOs) {
         if (isNull(priceHistoryDOs) || priceHistoryDOs.isEmpty()) {
             return emptyList();
         }
@@ -26,7 +27,7 @@ public class PriceHistoryMapper {
 
     public PriceHistoryDO mapDtoToDo(PriceHistoryDTO priceHistoryDTO) {
         if (isNull(priceHistoryDTO)) {
-            return new PriceHistoryDO();
+            return PriceHistoryDO.builder().id(INVALID_ID).build();
         }
 
         return PriceHistoryDO.builder()
@@ -40,7 +41,7 @@ public class PriceHistoryMapper {
 
     public PriceHistoryDTO mapDoToDto(PriceHistoryDO priceHistoryDO) {
         if (isNull(priceHistoryDO)) {
-            return new PriceHistoryDTO();
+            return PriceHistoryDTO.builder().id(INVALID_ID).build();
         }
 
         return PriceHistoryDTO.builder()

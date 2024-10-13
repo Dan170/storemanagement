@@ -61,7 +61,7 @@ public class ProductMapper {
                 .quantity(productDTO.getQuantity())
                 .weight(productDTO.getWeight())
                 .archived(productDTO.isArchived())
-                .priceHistoryDOs(priceHistoryMapper.mapDtoToDo(productDTO.getPriceHistoryList()))
+                .priceHistoryDOs(priceHistoryMapper.mapDtoToDoList(productDTO.getPriceHistoryList()))
                 .createdOn(productDTO.getCreatedOn())
                 .build();
     }
@@ -71,7 +71,7 @@ public class ProductMapper {
             return new ProductDTO();
         }
 
-        List<PriceHistoryDTO> priceHistoryDTOs = priceHistoryMapper.mapDoToDto(productDO.getPriceHistoryDOs());
+        List<PriceHistoryDTO> priceHistoryDTOs = priceHistoryMapper.mapDoToDtoList(productDO.getPriceHistoryDOs());
 
         return ProductDTO.builder()
                 .id(productDO.getId())
