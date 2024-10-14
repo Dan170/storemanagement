@@ -4,6 +4,7 @@ import com.storemanagement.jpa.entities.ProductDO;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -41,7 +42,7 @@ public class ProductMapper {
                 .quantity(productDTO.getQuantity())
                 .weight(productDTO.getWeight())
                 .archived(productDTO.isArchived())
-                .priceHistoryList(productDTO.getPriceHistoryList())
+                .priceHistoryList(new ArrayList<>(productDTO.getPriceHistoryList()))
                 .createdOn(productDTO.getCreatedOn())
                 .updatedOn(productDTO.getUpdatedOn())
                 .build();

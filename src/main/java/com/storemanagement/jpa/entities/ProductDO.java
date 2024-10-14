@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "PRODUCT")
 @Entity
 @Getter
+@Setter
 @SuperBuilder
 @RequiredArgsConstructor
 public class ProductDO extends AbstractDO {

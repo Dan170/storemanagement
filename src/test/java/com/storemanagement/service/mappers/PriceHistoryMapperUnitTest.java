@@ -4,8 +4,8 @@ import com.storemanagement.jpa.entities.PriceHistoryDO;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import org.junit.jupiter.api.Test;
 
-import static com.storemanagement.models.PriceHistoryDataModel.createPriceHistoryDO;
-import static com.storemanagement.models.PriceHistoryDataModel.createPriceHistoryDTO;
+import static com.storemanagement.models.StoreManagementDataModels.createPriceHistoryDO;
+import static com.storemanagement.models.StoreManagementDataModels.createPriceHistoryDTO;
 import static com.storemanagement.utils.ProductUtils.INVALID_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
