@@ -4,6 +4,7 @@ import com.storemanagement.jpa.entities.ProductDO;
 import com.storemanagement.jpa.repositories.ProductRepository;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
+import com.storemanagement.web.exceptionhandling.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ import static com.storemanagement.models.StoreManagementDataModels.createPriceHi
 import static com.storemanagement.models.StoreManagementDataModels.createPriceHistoryDTO;
 import static com.storemanagement.models.StoreManagementDataModels.createProductDO;
 import static com.storemanagement.models.StoreManagementDataModels.createProductDTO;
-import static com.storemanagement.utils.ProductUtils.INVALID_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -51,10 +53,11 @@ class ProductServiceUnitTest {
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         // when
-        var actualProductDTO = productService.getById(productId);
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> productService.getById(productId));
 
         // then
-        assertEquals(INVALID_ID, actualProductDTO.getId());
+        assertProductNotFoundEx(exception, productId);
     }
 
     @Test
@@ -125,10 +128,11 @@ class ProductServiceUnitTest {
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         // when
-        var actualProductDTO = productService.updateProduct(productId, createProductDTO(productId));
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> productService.updateProduct(productId, createProductDTO(productId)));
 
         // then
-        assertEquals(INVALID_ID, actualProductDTO.getId());
+        assertProductNotFoundEx(exception, productId);
     }
 
     @Test
@@ -169,13 +173,19 @@ class ProductServiceUnitTest {
     @Test
     void updatePrice_InvalidId() {
         // given
-        final long productId = -99;
+        final long productId = -98;
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         // when
-        var actualProductDTO = productService.updatePrice(productId, 10);
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
+                () -> productService.updatePrice(productId, 10));
 
         // then
-        assertEquals(INVALID_ID, actualProductDTO.getId());
+        assertProductNotFoundEx(exception, productId);
+    }
+
+    private void assertProductNotFoundEx(ResourceNotFoundException exception, long productId) {
+        assertNotNull(exception);
+        assertEquals("Product with id [" + productId + "] not found", exception.getMessage());
     }
 }

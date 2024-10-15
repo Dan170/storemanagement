@@ -2,8 +2,6 @@ package com.storemanagement.web.controller;
 
 import com.storemanagement.service.dtos.ProductDTO;
 import com.storemanagement.service.services.ProductService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.storemanagement.utils.ProductUtils.hasInvalidId;
-
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-
-    private static final Logger LOGGER = LogManager.getLogger(ProductController.class);
 
     private final ProductService productService;
 
@@ -36,47 +30,31 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        List<ProductDTO> foundProducts = productService.getAllProducts();
+        var foundProducts = productService.getAllProducts();
         return ResponseEntity.ok(foundProducts);
     }
 
     @GetMapping(path = "/{productId}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
-        ProductDTO foundProduct = productService.getById(productId);
-        if (hasInvalidId(foundProduct)) {
-            logNoProductFound(productId);
-            return ResponseEntity.notFound().build();
-        }
+        var foundProduct = productService.getById(productId);
         return ResponseEntity.ok(foundProduct);
     }
 
     @PostMapping
     public ResponseEntity<ProductDTO> saveProduct(@RequestBody ProductDTO productDTO) {
-        ProductDTO savedProduct = productService.saveProduct(productDTO);
+        var savedProduct = productService.saveProduct(productDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO productDTO) {
-        ProductDTO updatedProduct = productService.updateProduct(productId, productDTO);
-        if (hasInvalidId(updatedProduct)) {
-            logNoProductFound(productId);
-            return ResponseEntity.notFound().build();
-        }
+        var updatedProduct = productService.updateProduct(productId, productDTO);
         return ResponseEntity.ok(updatedProduct);
     }
 
     @PatchMapping("/{productId}")
     public ResponseEntity<ProductDTO> updatePrice(@PathVariable Long productId, @RequestParam double price) {
-        ProductDTO updatedProduct = productService.updatePrice(productId, price);
-        if (hasInvalidId(updatedProduct)) {
-            logNoProductFound(productId);
-            return ResponseEntity.notFound().build();
-        }
+        var updatedProduct = productService.updatePrice(productId, price);
         return ResponseEntity.ok(updatedProduct);
-    }
-
-    private void logNoProductFound(long productId) {
-        LOGGER.warn("No Product with id [{}] was found", productId);
     }
 }

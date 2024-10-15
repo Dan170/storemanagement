@@ -5,6 +5,7 @@ import com.storemanagement.jpa.repositories.ProductRepository;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
 import com.storemanagement.service.mappers.ProductMapper;
+import com.storemanagement.web.exceptionhandling.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.storemanagement.utils.ProductUtils.INVALID_ID;
 
 @Service
 @Transactional
@@ -40,7 +39,7 @@ class ProductServiceImpl implements ProductService {
                     LOGGER.info("Retrieved Product with id [{}]", id);
                     return savedProduct;
                 })
-                .orElseGet(() -> ProductDTO.builder().id(INVALID_ID).build());
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id [" + id + "] not found"));
     }
 
     @Override
@@ -70,20 +69,12 @@ class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO updateProduct(long productId, ProductDTO productWithUpdates) {
         var existingProduct = getById(productId);
-        if (existingProduct.getId() == INVALID_ID) {
-            return ProductDTO.builder().id(INVALID_ID).build();
-        }
-
         return updateProductAndHistory(existingProduct, productWithUpdates);
     }
 
     @Override
     public ProductDTO updatePrice(long productId, double newPrice) {
         var existingProduct = getById(productId);
-        if (existingProduct.getId() == INVALID_ID) {
-            return ProductDTO.builder().id(INVALID_ID).build();
-        }
-
         var productWithNewPrice = productMapper.mapDtoToDto(existingProduct);
         productWithNewPrice.setCurrentPrice(newPrice);
         return updateProductAndHistory(existingProduct, productWithNewPrice);
