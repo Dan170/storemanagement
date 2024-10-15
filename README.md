@@ -16,5 +16,25 @@ This is a Store Management project created by Daniel Popescu. The project has th
 The project is based on Java 17, Maven 3.3.2, SpringBoot 3.3.4. The project has an in memory H2 Database created when 
 the application is run. 
 
-After starting the server, the H2 console can be accessed here http://localhost:8080/h2-console, with username 
-**store_manager** and password **store_password** .
+Run the clean install configuration, then run the StoreManagementApplications configuration, the H2 console can be 
+accessed here http://localhost:8080/h2-console, with username **store_manager** and password **store_password** .
+
+The app requires basic authentication for accessing the products. There are 2 pre-configured in memory users:
+
+- manager with password: password
+- employee with password: password
+
+The root path for requests is: http://localhost:8080/products. There is the possibility to access this welcome 
+endpoint without authenticating first http://localhost:8080/products/welcome.
+
+The DB is pre-populated with one demo entry. The payload for adding new products is:
+
+```
+{
+"name": "Football",
+"currentPrice": 18.0,
+"description": "Sports item",
+"quantity": 10,
+"weight": 400.0
+}
+```

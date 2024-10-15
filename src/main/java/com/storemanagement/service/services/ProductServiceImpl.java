@@ -5,7 +5,7 @@ import com.storemanagement.jpa.repositories.ProductRepository;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
 import com.storemanagement.service.mappers.ProductMapper;
-import com.storemanagement.web.exceptionhandling.ResourceNotFoundException;
+import com.storemanagement.exceptionhandling.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

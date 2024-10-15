@@ -1,4 +1,4 @@
-package com.storemanagement.web.exceptionhandling;
+package com.storemanagement.exceptionhandling;
 
 public class ResourceNotFoundException extends RuntimeException {
 

@@ -4,7 +4,7 @@ import com.storemanagement.jpa.entities.ProductDO;
 import com.storemanagement.jpa.repositories.ProductRepository;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
-import com.storemanagement.web.exceptionhandling.ResourceNotFoundException;
+import com.storemanagement.exceptionhandling.ResourceNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
