@@ -1,5 +1,6 @@
 package com.storemanagement.service.mappers;
 
+import com.storemanagement.jpa.entities.PriceHistoryDO;
 import com.storemanagement.jpa.entities.ProductDO;
 import com.storemanagement.service.dtos.PriceHistoryDTO;
 import com.storemanagement.service.dtos.ProductDTO;
@@ -53,6 +54,9 @@ public class ProductMapper {
             return new ProductDO();
         }
 
+        List<PriceHistoryDO> priceHistoryDOs = new ArrayList<>(
+                priceHistoryMapper.mapDtoToDoList(productDTO.getPriceHistoryList()));
+
         return ProductDO.builder()
                 .id(productDTO.getId())
                 .name(productDTO.getName())
@@ -62,7 +66,7 @@ public class ProductMapper {
                 .quantity(productDTO.getQuantity())
                 .weight(productDTO.getWeight())
                 .archived(productDTO.isArchived())
-                .priceHistoryDOs(priceHistoryMapper.mapDtoToDoList(productDTO.getPriceHistoryList()))
+                .priceHistoryDOs(priceHistoryDOs)
                 .createdOn(productDTO.getCreatedOn())
                 .build();
     }
@@ -72,7 +76,8 @@ public class ProductMapper {
             return new ProductDTO();
         }
 
-        List<PriceHistoryDTO> priceHistoryDTOs = priceHistoryMapper.mapDoToDtoList(productDO.getPriceHistoryDOs());
+        List<PriceHistoryDTO> priceHistoryDTOs = new ArrayList<>(
+                priceHistoryMapper.mapDoToDtoList(productDO.getPriceHistoryDOs()));
 
         return ProductDTO.builder()
                 .id(productDO.getId())

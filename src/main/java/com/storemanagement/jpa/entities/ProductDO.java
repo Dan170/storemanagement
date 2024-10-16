@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,12 @@ public class ProductDO extends AbstractDO {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "product_id")
     private List<PriceHistoryDO> priceHistoryDOs = new ArrayList<>();
+
+    @PrePersist
+    protected void onCreate() {
+        super.onCreate();
+        this.rating = 0;
+    }
 
 //    add manyToOne to a review table
 //    private List<Review> reviews;
